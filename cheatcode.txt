@@ -1,0 +1,61 @@
+@Controller
+public class noticeController {
+
+/*	@RequestMapping("/")
+	public String showHome(HttpSession Session){
+		//System.out.println("test");		
+		Session.setAttribute("name", "Shahadat");
+		return "home";
+	}*/
+	
+/*	@RequestMapping("/")
+	public ModelAndView showHome(){
+		ModelAndView mv = new ModelAndView("home");
+		Map<String, Object> model = mv.getModel();
+		model.put("name", "Shahadat");
+		return mv;
+	}*/
+	
+	@RequestMapping("/")
+	public String showHome(Model model){		
+		model.addAttribute("name", "<b>Shahadat</b>");
+		return "home";
+	}
+}
+
+
+View ############
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+
+https://tomcat.apache.org/tomcat-7.0-doc/jndi-datasource-examples-howto.html
+Server Context Mysql #############
+
+<Resource name="jdbc/TestDB" auth="Container" type="javax.sql.DataSource"
+               maxActive="100" maxIdle="30" maxWait="10000"
+               username="javauser" password="javadude" driverClassName="com.mysql.jdbc.Driver"
+               url="jdbc:mysql://localhost:3306/javatest"/>
+
+
+web.xml  ##############
+<description>MySQL Test App</description>
+  <resource-ref>
+      <description>DB Connection</description>
+      <res-ref-name>jdbc/TestDB</res-ref-name>
+      <res-type>javax.sql.DataSource</res-type>
+      <res-auth>Container</res-auth>
+  </resource-ref>
+
+
+.jsp #############
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<sql:query var="rs" dataSource="jdbc/TestDB">
+select id, foo, bar from testdata
+</sql:query>
+
+<c:forEach var="row" items="${rs.rows}">
+    Foo ${row.foo}<br/>
+    Bar ${row.bar}<br/>
+</c:forEach>
